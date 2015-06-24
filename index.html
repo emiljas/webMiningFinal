@@ -6,17 +6,19 @@
 </head>
 <body>
   <div id="root">
-    <input data-bind="textInput: query" type="text" />
-
-    <div data-bind="foreach: items">
-      <p data-bind="text: $data"></p>
+    <p>
+      <button data-bind="click: generateIndex">generuj index</button>
+    </p>
+    <p>
+      <input data-bind="textInput: query" type="text" />
+      <button data-bind="click: search">szukaj</button>
+    </p>
+    <div data-bind="foreach: results">
+      <p data-bind="text: url"></p>
     </div>
   </div>
+
   <script src="bower_components/knockoutjs/dist/knockout.js"></script>
-  <script>
-  var items = require('./src/main');
-  console.log(items);
-  </script>
   <script src="script.js"></script>
 </body>
 </html>

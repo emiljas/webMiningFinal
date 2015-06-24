@@ -58,52 +58,47 @@ var urls = [
 
 var searcher = new Searcher();
 
-// var downloadPagePromises = _.map(urls, function(url) { return downloadPage(url); });
-// Promise.all(downloadPagePromises)
-// .then(function(contents) {
-//   contents.forEach(function(content) {
-//     var cleanedContent = cleanHtml(content);
-//
-//     searcher.add(cleanedContent);
-//   });
-// });
-
-var pagePromises = _.map(urls, function(url) { return processPage(url); });
-Promise.all(pagePromises)
-.then(function() {
-  return searcher.saveIndex();
-})
-.then(function() {
-  console.log("INDEX SAVED");
-})
-.catch(function(err) {
-  console.log(err);
-});
-
-function processPage(url) {
-  return downloadPage(url)
-  .then(function(html) {
-    return cleanHtml(html);
-  })
-  .then(function(text) {
-    return searcher.add({
-      url: url,
-      text: text
-    });
+function generateIndex() {
+  var pagePromises = _.map(urls, function(url) { return processPage(url); });
+  Promise.all(pagePromises)
+  .then(function() {
+    return searcher.saveIndex();
   })
   .then(function() {
-    console.log("DONE");
+    console.log("INDEX SAVED");
   })
   .catch(function(err) {
     console.log(err);
   });
+
+  function processPage(url) {
+    return downloadPage(url)
+    .then(function(html) {
+      return cleanHtml(html);
+    })
+    .then(function(text) {
+      return searcher.add({
+        url: url,
+        text: text
+      });
+    })
+    .then(function() {
+      console.log("DONE");
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+  }
 }
 
-// downloadPage('http://www.onet.pl')
-// .then(function(content) {
-//   console.log(content);
-// });
+function search(query) {
+  return searcher.loadIndex()
+  .then(function() {
+    return searcher.search(query, 'word');
+  });
+}
 
-module.exports = [
-  'qw', 'dfbgrgwre', 'polsd'
-];
+module.exports = {
+  generateIndex: generateIndex,
+  search: search
+};
