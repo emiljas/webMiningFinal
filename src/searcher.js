@@ -32,18 +32,13 @@ function Searcher() {
   };
 
   this.search = function(query, mode) {
-    console.log('search');
-
     return new Promise(function(resolve) {
       var results = [];
       if(mode == 'word' || mode == 'exactly') {
         results = searcher.search(query);
-        console.log(results);
         resolve(results);
       }
       else if(mode == 'words') {
-        console.log('words');
-
         var words = query.split(' ');
         var searchPromises = _.map(words, function(word) { return self.search(word, 'word'); });
         Promise.all(searchPromises)
@@ -65,8 +60,7 @@ function Searcher() {
             }
           }
 
-          console.log(results);
-          resolve(result);
+          resolve(result.unique());
         });
       }
     });

@@ -6,8 +6,10 @@
 </head>
 <body>
   <div id="root">
+    <p data-bind="visible: isInProgress">proszę czekać</p>
     <p>
       <button data-bind="click: generateIndex">generuj index</button>
+      <button data-bind="click: loadIndex">wczytaj index</button>
     </p>
     <p>
       <input data-bind="textInput: query" type="text" />
