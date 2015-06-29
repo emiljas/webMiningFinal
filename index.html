@@ -15,6 +15,10 @@
       <input data-bind="textInput: query" type="text" />
       <button data-bind="click: search">szukaj</button>
     </p>
+    <p>
+      <label><input type="radio" value="exactly" data-bind="checked: searchMode" />dokładne wyszukanie</label>
+      <label><input type="radio" value="words" data-bind="checked: searchMode" />jakiekolwiek słowo</label>
+    </p>
     <div data-bind="foreach: results">
       <p data-bind="text: url"></p>
     </div>

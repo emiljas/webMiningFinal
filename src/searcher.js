@@ -3,6 +3,8 @@ var fulltextsearchlight = require('full-text-search-light');
 
 var indexPath = '/media/emil/dell/index';
 
+var resultLimit = 5;
+
 function Searcher() {
   var self = this;
 
@@ -34,13 +36,16 @@ function Searcher() {
   this.search = function(query, mode) {
     return new Promise(function(resolve) {
       var results = [];
-      if(mode == 'word' || mode == 'exactly') {
+      if(mode == 'exactly') {
         results = searcher.search(query);
+        results.splice(resultLimit);
         resolve(results);
       }
       else if(mode == 'words') {
         var words = query.split(' ');
-        var searchPromises = _.map(words, function(word) { return self.search(word, 'word'); });
+        var searchPromises = _.map(words, function(word) {
+          return self.search(word, 'exactly');
+        });
         Promise.all(searchPromises)
         .then(function(results) {
           var result = [];
@@ -60,9 +65,13 @@ function Searcher() {
             }
           }
 
-          resolve(result.unique());
+          result.splice(resultLimit);
+          resolve(result);
         });
       }
+    })
+    .catch(function(err) {
+      console.log(err);
     });
   };
 

@@ -7,6 +7,8 @@ function ViewModel() {
 
   this.isInProgress = ko.observable(false);
 
+  this.searchMode= ko.observable("exactly");
+
   this.generateIndex = function() {
     self.isInProgress(true);
 
@@ -30,7 +32,7 @@ function ViewModel() {
   this.search = function() {
     self.isInProgress(true);
 
-    main.search(self.query(), 'word')
+    main.search(self.query(), this.searchMode())
     .then(function(results) {
       console.log(results);
       self.results(results);
